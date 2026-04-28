@@ -21,10 +21,6 @@ jobs:
     name: Terraform
     runs-on: ubuntu-latest 
 
-    defaults:
-      run:
-        working-directory: fase-3-docker-aws-terraform  # 👈 AQUI É A CORREÇÃO
-
     steps: 
       - name: Checkout
         uses: actions/checkout@v5
@@ -38,15 +34,22 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4
 
+      - name: Debug - listar arquivos
+        run: ls -R
+
       - name: Terraform Init
-        run: terraform init 
+        run: terraform init
+        working-directory: fase-3-docker-aws-terraform
 
       - name: Terraform Validate
-        run: terraform validate 
+        run: terraform validate
+        working-directory: fase-3-docker-aws-terraform
       
       - name: Terraform Plan
         run: terraform plan -out=tfplan
+        working-directory: fase-3-docker-aws-terraform
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
+        working-directory: fase-3-docker-aws-terraform
         if: github.event.inputs.apply == 'true'
