@@ -34,15 +34,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4
 
-      - name: Debug - listar arquivos
-        run: ls -R
-
-      - name: Debug
-        run: |
-          pwd
-          ls -R
-
-      - name: Terraform Init
+        name: Terraform Init
         run: cd fase-3-docker-aws-terraform && terraform init
 
       - name: Terraform Validate
@@ -54,3 +46,4 @@ jobs:
       - name: Terraform Apply
         run: cd fase-3-docker-aws-terraform && terraform apply -auto-approve tfplan
         if: github.event.inputs.apply == 'true'
+
