@@ -24,10 +24,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Debug
+      - name: 🔍 Debug básico
         run: |
+          echo "📁 Diretório atual:"
           pwd
+
+          echo "📂 Arquivos na raiz:"
+          ls -la
+
+          echo "🌳 Estrutura completa:"
           ls -R
+
+      - name: 🔍 Debug pasta Terraform
+        run: |
+          echo "Conteúdo da pasta Terraform:"
+          ls -la fase-3-docker-aws-terraform || echo "Pasta não encontrada"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
@@ -39,14 +50,18 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform -chdir=fase-3-docker-aws-terraform init
+        working-directory: fase-3-docker-aws-terraform
+        run: terraform init
 
       - name: Terraform Validate
-        run: terraform -chdir=fase-3-docker-aws-terraform validate
+        working-directory: fase-3-docker-aws-terraform
+        run: terraform validate
 
       - name: Terraform Plan
-        run: terraform -chdir=fase-3-docker-aws-terraform plan -out=tfplan
+        working-directory: fase-3-docker-aws-terraform
+        run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        run: terraform -chdir=fase-3-docker-aws-terraform apply -auto-approve tfplan
+        working-directory: fase-3-docker-aws-terraform
+        run: terraform apply -auto-approve tfplan
         if: github.event.inputs.apply == 'true'
