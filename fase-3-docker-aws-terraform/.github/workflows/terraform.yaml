@@ -37,19 +37,20 @@ jobs:
       - name: Debug - listar arquivos
         run: ls -R
 
+      - name: Debug
+        run: |
+          pwd
+          ls -R
+
       - name: Terraform Init
-        run: terraform init
-        working-directory: fase-3-docker-aws-terraform
+        run: cd fase-3-docker-aws-terraform && terraform init
 
       - name: Terraform Validate
-        run: terraform validate
-        working-directory: fase-3-docker-aws-terraform
-      
+        run: cd fase-3-docker-aws-terraform && terraform validate
+
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
-        working-directory: fase-3-docker-aws-terraform
+        run: cd fase-3-docker-aws-terraform && terraform plan -out=tfplan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
-        working-directory: fase-3-docker-aws-terraform
+        run: cd fase-3-docker-aws-terraform && terraform apply -auto-approve tfplan
         if: github.event.inputs.apply == 'true'
