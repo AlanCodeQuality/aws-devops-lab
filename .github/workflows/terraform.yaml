@@ -12,15 +12,6 @@ on:
           - true
           - false
 
-      plan_destroy:
-        description: 'Planejar o destroy do ambiente?'
-        required: true
-        default: 'false'
-        type: choice
-        options:
-          - true
-          - false
-
       destroy:
         description: 'Destruir ambiente?'
         required: true
@@ -41,6 +32,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: 🔍 Debug (opcional)
+        run: |
+          echo "📁 Diretório atual:"
+          pwd
+          echo "📂 Arquivos:"
+          ls -la
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
@@ -68,12 +66,7 @@ jobs:
         run: terraform apply -auto-approve tfplan
         if: github.event.inputs.apply == 'true'
 
-      - name: Plan Destroy
-        working-directory: fase-3-docker-aws-terraform
-        run: terraform plan -destroy -out=tfplan-destroy
-        if: github.event.inputs.plan_destroy == 'true'
-
       - name: Terraform Destroy
         working-directory: fase-3-docker-aws-terraform
-        run: terraform apply -auto-approve tfplan-destroy
+        run: terraform destroy -auto-approve
         if: github.event.inputs.destroy == 'true'
