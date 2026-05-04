@@ -1,34 +1,31 @@
 resource "aws_instance" "website_server" {
-  ami           = "ami-098e39bafa7e7303d" #Amazon Linux 2 AMI 
-  instance_type = "t2.micro"
-  key_name = "chave-site-prod"
+  ami                    = "ami-0b016c703b95ecbe4" #Amazon Linux 2 AMI
+  instance_type          = "t2.micro"
+  key_name               = "chave-site-prod"
   vpc_security_group_ids = [aws_security_group.website_sg.id]
-  iam_instance_profile = "ECR-EC2-Role"
+  iam_instance_profile   = "ECR-EC2-Role"
 
   tags = {
-    Name = "website-server"
+    Name        = "website-server"
     Provisioned = "Terraform"
-    Cliente = "Maria"
+    Cliente     = "Maria"
   }
 }
 
+## Security Group
 resource "aws_security_group" "website_sg" {
-  name        = "website_sg"
-  vpc_id      = "vpc-0063859106005c800"
-
-
-
+  name   = "website-sg"
+  vpc_id = "vpc-0ff60a695425883cf"
   tags = {
-    Name = "website_sg"
+    Name        = "website-sg"
     Provisioned = "Terraform"
-    Cliente = "Maria"
-
+    Cliente     = "Maria"
   }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.website_sg.id
-  cidr_ipv4         = "138.185.145.130/32"
+  cidr_ipv4         = "seu-ip/32"
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
@@ -56,3 +53,4 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_outbound" {
   cidr_ipv4   = "0.0.0.0/0"
   ip_protocol = -1
 }
+
